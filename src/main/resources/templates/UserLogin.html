@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container">
+		
+		<div class="card">
+			
+			<div class="card-headr bg-primary text-white text-center">
+				<h3>USER LOGIN PAGE</h3>
+			</div>
+			
+			<div class="card-body">
+				<form th:action="@{/login}" method="post">
+					
+					<div class="row">
+						<div class="col-2">User Name</div>
+						<div class="col-6">
+							<input type="text" name="username" class="form-control"/>
+						</div>
+					</div>
+					
+					</br>
+					
+					<div class="row">
+						<div class="col-2">Password</div>
+						<div class="col-6">
+							<input type="password" name="password" class="form-control"/>
+						</div>
+					</div>
+					
+					</br>
+	         
+	                <input type="submit" value="Login" class="btn btn-success"/> &nbsp;&nbsp;&nbsp;
+	                <a th:href="@{/user/showForgotPwd}" class="btn btn-danger">Forgot Password</a>
+	                <a th:href="@{/user/showactivateUserotp}" class="btn btn-danger">Activate User</a>
+	     
+                  </form>
+                  
+			  </div>
+			
+			<div th:if="${param.error}" class="card-footer text-danger bg-white text-center">
+				<b>Invalid or Inactive User details</b>
+			</div>
+			<div th:if="${param.success}" class="card-footer text-success bg-white text-center">
+				<b>User Logout success</b>
+			</div>
+		
+        
+        
+		</div>
+    </div>
+</body>
+</html>

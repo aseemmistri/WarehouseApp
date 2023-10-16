@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+ <script
+	src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/js/all.min.js"></script>   
+</head>
+<body>
+	<div th:insert="fragments/commonui :: userhead"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+	
+	<!--<div class="container">-->
+		
+	<div class="card">
+		
+		 <div class="card-header bg-primary text-white text-center">
+				 <h3>SALE ORDER DATA PAGE</h3> 
+		 </div> <!--card header end-->
+		 
+		  <div class="card-body">
+			  <a th:href="@{/so/excel}" class="btn btn-warning">EXCEL EXPORT</a> |
+			  <a th:href="@{/so/pdf}" class="btn btn-warning">PDF EXPORT</a>
+			<table class="table table-hover">
+				<tr class="bg-success text-white">
+					<th>ID</th>
+					<th>CODE</th>
+					<th>STATUS</th>
+					<th>SHIPMENT</th>
+					<th>CUSTOMER</th>
+					<th colspan="7">OPERATIONS</th>
+				</tr>
+				<tr th:each="ob:${list}">
+					<td th:text="${ob.id}"></td>
+					<td th:text="${ob.orderCode}"></td>
+					<td th:text="${ob.status}"></td>
+					<td th:text="${ob.shipmentType.shipmentCode}"></td>
+					<td th:text="${ob.customer.userCode}"></td>
+					<td><a th:href="@{/saleorder/edit/{id}(id=${ob.id})}" class="btn btn-success btn-sm"><i class="far fa-edit"></i></a>
+							</td>
+							<td><a th:href="@{/saleorder/view/{id}(id=${ob.id})}" class="btn btn-info"><i class="far fa-eye"></i></a></td>
+							<td><a th:href="@{/so/delete?id={data} (data=${ob.id})}" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a></td>
+							<td><a th:href="@{/saleorder/excel/{id}(id=${ob.id})}" class="btn btn-warning btn-sm"><i class="fas fa-file-excel"></i></a></td>
+							<td><a th:href="@{/saleorder/pdf/{id}(id=${ob.id})}" class="btn btn-secondary btn-sm"><i class="fas fa-file-pdf"></i></a></td>
+					<td>
+						<a class="btn btn-info"  th:href="@{/so/parts?id={data} (data=${ob.id})}"><i class="fas fa-plus-circle"></i></a>&nbsp; 
+					</td>
+					<td>
+									<div th:switch="${ob.status}">
+										<span th:case="${'SALE-CONFIRM'}"> <a
+											th:href="@{/so/genInv?id={data} (data=${ob.id})}"
+											class="btn btn-info btn-sm"><i class="fas fa-receipt"></i></a>
+										</span> <span th:case="${'SALE-INVOICED'}"> <a
+											th:href="@{/so/printInv?id={data} (data=${ob.id})}"
+											class="btn btn-success btn-sm"><i class="fas fa-print"></i></a>
+										</span> <span th:case="${'SALE-READY'}" class="btn btn-success btn-sm"> <i class="fa fa-tasks" aria-hidden="true"></i>
+										</span>
+										 <span th:case="${'SALE-OPEN'}" data-toggle="tooltip"
+											data-placement="bottom" title="Add Items"
+											class="btn btn-info btn-sm"> <b>Add Item</b>
+										</span>
+									</div>
+								</td>
+				</tr>
+			</table>
+		  </div> <!--card body end-->
+		  
+		   <div class="card-footer bg-warning text-white text-center"  th:if="${message != null}">
+				 <span  th:text="${message}" ></span>
+			 </div> <!--card footer end-->
+		  
+	</div>	<!--card end-->
+		
+<!--</div>-->  <!--continer end-->
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+    
+</head>
+<body>
+	<div th:insert="fragments/commonui :: userhead"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+	
+	<!--<div class="container">-->
+		
+	<div class="card">
+		
+		 <div class="card-header bg-primary text-white text-center">
+				 <h3>SALE PARTS DATA PAGE (SCREEN#2)</h3> 
+		 </div> <!--card header end-->
+		 
+		  <div class="card-body">
+			 <!--Section#1 start--> 
+			<table class="table table-bordered">
+				<tr>
+					<th>ORDER CODE</th>
+					<th th:text="${so.orderCode}" class="alert alert-secondary"></th> 
+					<th>ORDER STATUS</th>
+					<th th:text="${so.status}" class="alert alert-secondary"></th>
+				</tr>
+			</table>
+			<!--Section#1 end-->
+			
+			<!--Section#2 start-->
+			<hr/>
+			<div th:if="${so.status=='SALE-OPEN' || so.status=='SALE-READY'}">
+			<form th:action="@{/so/add}" method="post" th:object="${saleDtl}">
+				<div class="row">
+						<div class="col-2">
+							<label>CHOOSE PART</label>
+						</div>
+						<div class="col-3">
+							 <select th:field="*{part.id}" class="form-control">
+		                             <option value="">-SELECT-</option>
+		                             <option th:each="ob:${parts}" th:value="${ob.key}" th:text="${ob.value}"></option>
+	                         </select>
+						</div>
+						
+					
+					
+						<div class="col-2">
+							<label>QUANTITY</label>
+						</div>
+						<div class="col-3">
+							<input type="text" th:field="*{qty}" class="form-control"/>
+						</div>
+						
+						
+						<!--Hidden Input for Linking Dtl with Order-->
+						<input type="hidden" name="order.id" th:value="${so.id}"/>
+						<!--Hidden Input END-->
+						
+						<div class="col-2">
+							<input type="submit" value="Add" class="btn btn-success"/>
+						</div>
+						
+					</div>
+			</form>
+			</div>
+			<!--Section#2 end-->
+			
+			<hr/>
+			<!--Section#4 display items added-->
+			<table class="table">
+				<tr class="bg-info text-white">
+					<td>SlNo</td>
+					<td>Item Code</td>
+					<td>Base Cost</td>
+					<td>Quantity</td>
+					<td th:if="${so.status=='SALE-READY'}">Operation</td>
+				</tr>
+				<tr th:each="ob,i:${dtls}">
+					<td th:text="${i.count}"></td>
+					<td th:text="${ob.part.partCode}"></td>
+					<td th:text="${ob.part.partCost}"></td>
+					<td th:text="${ob.qty}"></td>
+					<td th:if="${so.status=='SALE-READY'}">
+						<a th:href="@{/so/remove?dtlId={id2}&orderId={id1}(id2=${ob.id},id1=${so.id})}" class="btn btn-danger">REMOVE</a>
+					</td>
+				</tr>
+			</table>
+			<!--Section#4 end-->
+			
+			<div class="text-center" th:if="${so.status=='SALE-READY'}">
+			<a th:href="@{/so/confirmOrder?orderId={id}(id=${so.id})}" class="btn btn-success">SAVE AND CONTINUE</a>
+		    </div>
+			
+		  </div> <!--card body end-->
+		  
+		   <div class="card-footer bg-warning text-white text-center"  th:if="${message != null}">
+				 <span  th:text="${message}" ></span>
+			 </div> <!--card footer end-->
+		  
+	</div>	<!--card end-->
+		
+<!--</div> --> <!--continer end-->
+</body>
+</html>

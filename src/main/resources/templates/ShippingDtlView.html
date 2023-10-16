@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+  
+</head>
+<body>
+	<div th:insert="fragments/commonui :: userhead"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+	
+	<!--<div class="container">-->
+		
+	<div class="card">
+		
+		 <div class="card-header bg-primary text-white text-center">
+				 <h3>SHIPPING DETAILS PAGE</h3> 
+		 </div> <!--card header end-->
+		 
+		  <td class="card-body">
+			  <table class="table table-hover">
+				<tr>
+					<th>SHIPPING CODE</th>
+					<th th:text="${shipping.code}" class="bg-info text-white"></th>
+				
+					<th>ORDER(SO) CODE</th>
+					<th th:text="${shipping.so.orderCode}" class="bg-info text-white"></th>
+				</tr>
+			  </table>
+			  
+			  <hr/>		
+			  
+			<table class="table table-hover">
+				<tr class="bg-success text-white">
+					<th>ITEM CODE</th>
+					<th>BASE COST</th>
+					<th>QUANTITY</th>
+					<th>GST%</th>
+					<th>ITEM VALUE</th>
+					<th>OPERATION</th>
+				</tr>
+				<tr th:each="ob:${list}">
+					<td th:text="${ob.itemCode}"></td>
+					<td th:text="${ob.baseCost}"></td>
+					<td th:text="${ob.qty}"></td>
+					<td th:text="${ob.gstSlob}"></td>
+					<td th:text="${ob.itemValue}"></td>
+					
+					
+					<td>
+						<div th:if="${ob.status == null}">
+						<a class="btn btn-info"  th:href="@{/shipping/updateStatus?shippingId={shippingId}&shippingDtlId={dtlId}&status=RECEIVED(dtlId=${ob.id},shippingId=${shipping.id})}">RECEIVE</a> |	
+						<a class="btn btn-info"  th:href="@{/shipping/updateStatus?shippingId={shippingId}&shippingDtlId={dtlId}&status=RETURNED(dtlId=${ob.id},shippingId=${shipping.id})}">RETURN</a> 
+					    </div>
+					    <div th:if="${ob.status=='RECEIVED'}">
+						<span th:text="${ob.status}" class="text-primary"></span>
+					    </div>
+					    <div th:if="${ob.status=='RETURNED'}">
+						<span th:text="${ob.status}" class="text-danger"></span>
+					    </div>
+					</td>
+					
+					
+					
+				</tr>
+			</table>
+			
+			 <hr>
+		  <div class="row">
+						<div class="col-2"><h5>Total Amount :</h5></div>
+						<div class="col-6">
+							<input id="payment_field" type="text"  class="form-control"/>
+						</div>
+						
+				</div>
+				<div class="">
+					<button onclick="paymentStart()" class="btn btn-success col-2 mt-3">Pay</button>
+				</div>
+				<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+	const paymentStart =()=>{
+		console.log("paymentStart...");
+		let amount = $("#payment_field").val();
+		console.log(amount);
+		if(amount==''||amount==null){
+			alert("amount is requerd !");
+			return;
+		}
+		$.ajax({
+			url:'/user/createOrder',
+			data:{amount:amount},
+			success:function(response){
+			var options = {
+    "key": "rzp_test_0OEkArMp4kyUYn", // Enter the Key ID generated from the Dashboard
+    "amount":response.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "ASEEM MISTRI", //your business name
+    "description": "Test Transaction",
+    "image": "",
+    "order_id":response, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+        alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature)
+    },
+    "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+        "name": "", //your customer's name
+        "email": "", 
+        "contact": ""  //Provide the customer's phone number for better conversion rates 
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+rzp1.on('payment.failed', function (response){
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+});
+    rzp1.open();
+    
+			},
+			error:function(error){
+				console.log(error);
+				alert("something went wrong!");
+			}
+		});
+	};
+
+
+</script>
+					
+			
+		  </div> <!--card body end-->
+		  
+		 
+		  
+		  
+		   
+			 </div> <!--card footer end-->
+		  
+	</div>	<!--card end-->
+		
+<!--</div>-->  <!--continer end-->
+
+
+
+</body>
+</html>

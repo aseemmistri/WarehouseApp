@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+    
+</head>
+<body>
+	<div th:insert="fragments/commonui :: userhead"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+	
+	<!--<div class="container">-->
+		<div class="card">
+			
+			<div class="card-header bg-primary text-white text-center">
+				<h3>WH USER TYPE DATA PAGE</h3>
+			</div>
+			
+			<div class="card-body">
+			    <table class="table table-hover">
+				   <tr class="bg-success text-white">
+						<th>ID</th>
+						<th>CODE</th>
+						<th>FOR</th>
+						<th>EMAIL</th>
+						<th>CONTACT</th>
+						<th>IDTYPE</th>
+						<th>IFOTHER</th>
+						<th>IDNUMBER</th>
+						<th colspan="2">OPERATION</th>
+					</tr>
+					<tr th:each="ob:${list}">
+						<td th:text="${ob.id}"></td>
+						<td th:text="${ob.userCode}"></td>
+						<td th:text="${ob.userFor}"></td>
+						<td th:text="${ob.userEmail}"></td>
+						<td th:text="${ob.userContact}"></td>
+						<td th:text="${ob.userIdType}"></td>
+						<td th:text="${ob.ifOther}"></td>
+						<td th:text="${ob.idNumber}"></td>
+						<td>
+							<a class="btn btn-danger" th:href="@{/wh/delete?id={data} (data=${ob.id})}">DELETE</a> 
+						</td>
+						<td>	
+							<a class="btn btn-info" th:href="@{/wh/edit?id={data} (data=${ob.id})}">EDIT</a>
+						</td>
+					</tr>
+				</table>
+			</div> <!--card body end-->
+			
+			<div class="card-footer bg-warning text-white text-center"  th:if="${message != null}">
+				 <span  th:text="${message}" ></span>
+			 </div> <!--card footer end-->
+			
+		</div>
+
+
+
+	<!--</div>-->
+</body>
+</html>

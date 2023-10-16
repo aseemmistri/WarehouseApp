@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+
+</head>
+<body>
+	<div th:insert="fragments/commonui :: userhead"></div>
+	<div th:insert="fragments/commonui :: usermenu"></div>
+<!--<div class="container">-->
+	<div class="card">
+		<div class="card-header bg-primary text-white text-center">
+			<h3>Order Method Register Page</h3>
+		</div> <!--card-header-end-->
+		<div class="card-body">
+			<form id="orderRegForm" th:action="@{/om/save}" method="post" th:object="${orderMethod}">
+				<!--Row#1-->
+				<div class="row">
+					<div class="col-2">
+						<label>Order Mode</label>
+					</div>
+					<div class="col-5">
+						<input type="radio" th:field="*{orderMode}" value="Sale"/>Sale
+				        <input type="radio" th:field="*{orderMode}" value="Purchase" />Purchase
+					</div>
+					<div class="col-5">
+						<span id="orderModeError"></span>
+					</div>
+				</div>
+				<!--Row#2-->
+				<div class="row">
+					<div class="col-2">
+						<label>Order Code</label>
+					</div>
+					<div class="col-5">
+						<input type="text" th:field="*{orderCode}" class="form-control"/>
+					</div>
+					<div class="col-5">
+						<span id="orderCodeError"></span>
+					</div>
+				</div>
+				<!--Row#3-->
+				<div class="row">
+					<div class="col-2">
+						<label>Order Type</label>
+					</div>
+					<div class="col-5">
+						<select th:field="*{orderType}" class="form-control">
+					          <option value="-1">-Select-</option>
+					          <option value="FIFO">FIFO</option>
+					          <option value="LIFO">LIFO</option>
+					          <option value="FCFO">FCFO</option>
+					          <option value="FIFO">FEFO</option>
+				        </select>  
+					</div>
+					<div class="col-5">
+						<span id="orderTypeError"></span>
+					</div>
+				</div>
+				<!--Row#4-->
+				<div class="row">
+					<div class="col-2">
+						<label>Order Accept</label>
+					</div>
+					<div class="col-5">
+						 <input type="checkbox" th:field="*{orderAcpt}" value="Multi-Model" />Multi-Model
+				         <input type="checkbox" th:field="*{orderAcpt}" value="Accept Return" />Accept Return
+					</div>
+					<div class="col-5">
+						 <span id="orderAcptError"></span>
+					</div>
+				</div>
+				<!--Row#5-->
+				<div class="row">
+					<div class="col-2">
+						<label>Description</label>
+					</div>
+					<div class="col-5">
+						<textarea th:field="*{description}" class="form-control"></textarea>
+					</div>
+					<div class="col-5">
+						
+					</div>
+				</div>
+				
+				<input type="submit" value="CREATE ORDER METHOD" class="btn btn-success"/>
+			</form>
+		</div> <!--card-body-end-->
+		<div class="card-footer bg-info text-white text-center"  th:if="${message != null}">
+			<span  th:text="${message}" ></span>
+		</div> <!--card-footer-end-->
+	</div> <!--card end-->
+<!--</div>-->	<!--container end-->
+
+<script>
+	$(document).ready(function(){
+		$("#orderAcptError").hide();
+		
+		var orderAcptError = false;
+		
+		function validate_orderAcpt(){
+		var len=	$('[name="orderAcpt"]:checked').length;
+		if(len===0){
+			$("#orderAcptError").show();
+			$("#orderAcptError").html("Please choose one option");
+			$("#orderAcptError").css("color","red");
+			orderAcptError = false;
+		}else{
+			$("#orderAcptError").hide();
+			orderAcptError = true;
+		}
+			return orderAcptError;
+		}
+		
+		$('[name="orderAcpt"]').change(function(){
+			validate_orderAcpt();
+		});
+		
+		$("#orderRegForm").submit(function(){
+			validate_orderAcpt();
+			if(orderAcptError) return true;
+			else return false;//not submit form 
+		});
+	});
+	
+</script>
+
+</body>
+</html>
