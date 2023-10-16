@@ -145,7 +145,7 @@ public class UomController {
 		return m;
 	}
 
-	//8. pdf export
+	//8.pdf export
 	@GetMapping("/pdf")
 	public ModelAndView exportToPdf() {
 		ModelAndView m = new ModelAndView();
